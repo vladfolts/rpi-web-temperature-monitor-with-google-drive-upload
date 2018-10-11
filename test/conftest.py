@@ -16,9 +16,9 @@ def with_empty_dir():
 def with_sample_db(with_empty_dir):
     db_path = os.path.join(with_empty_dir, 'sample.db')
     s = storer.Sqlite3Storer(db_path)
-    s.put(storer.Record(timestamp=1537131014.495, value=25.67))
+    s.put(storer.Record(timestamp=1537131014.49, value=25.67))
     s.put(storer.Record(timestamp=1537131015, value=26))
-    return db_path
+    return s, db_path
 
 def remove_if_exists(path):
     if os.path.exists(path):

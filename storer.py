@@ -24,3 +24,12 @@ class Sqlite3Storer(object):
         cursor = self.__conn.cursor()
         cursor.execute('INSERT INTO temperature(timestamp, value) VALUES(%s, %s)' % (record.timestamp, record.value))
         self.__conn.commit()
+
+    def list_gen(self, limit=None):
+        sql = 'SELECT timestamp, value FROM temperature ORDER BY rowid DESC'
+        if limit is not None:
+            sql += ' LIMIT %d' % limit
+        
+        cursor = self.__conn.cursor()
+        for row in cursor.execute(sql):
+            yield Record(timestamp=row[0], value=row[1])

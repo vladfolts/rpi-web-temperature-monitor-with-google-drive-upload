@@ -9,14 +9,19 @@ function getData(){
             showChart(response)
         }
     };
-    xhttp.open("GET", "/temperature/", true);
+    xhttp.open("GET", "/temperature/?limit=600", true);
     xhttp.send();
 }
 
-function secsToLabel(secs){
-    var t = new Date(1970, 0, 1);
-    t.setSeconds(secs);
+function dtFromSecs(secs){
+    var t = new Date(secs * 1000);
+    //t.setSeconds(secs);
     return t;
+}
+
+function secsToLabel(secs){
+    t = dtFromSecs(secs);
+    return t.getMinutes() + ':' + t.getSeconds();
 }
 
 function showChart(data){
@@ -28,13 +33,17 @@ function showChart(data){
         labels.unshift(secsToLabel(item.timestamp));
     }
 
+    label = 'Temperature'
+    if (data)
+        label += ' ' + dtFromSecs(data[0].timestamp)
+
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Temperature',
+                label: label,
                 data: values,
                 /*backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',

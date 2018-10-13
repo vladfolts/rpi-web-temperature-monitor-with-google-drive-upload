@@ -1,3 +1,10 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+<TITLE>Chart</TITLE>
+</HEAD>
+<BODY>
+
 <canvas id="myChart"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
 <script>
@@ -14,9 +21,7 @@ function getData(){
 }
 
 function dtFromSecs(secs){
-    var t = new Date(secs * 1000);
-    //t.setSeconds(secs);
-    return t;
+    return new Date(secs * 1000);
 }
 
 function secsToLabel(secs){
@@ -79,3 +84,6 @@ function showChart(data){
 <script>
 getData();
 </script>
+
+</BODY>
+</HTML>

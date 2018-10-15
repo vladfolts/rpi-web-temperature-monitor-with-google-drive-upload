@@ -36,4 +36,4 @@ def process_command_line():
 if __name__ == '__main__':
     options = process_command_line()
     db_path = options.db_path
-    app.run(debug=options.debug)
+    app.run(host='0.0.0.0', debug=options.debug)

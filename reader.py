@@ -7,8 +7,8 @@ def _open_device():
     device_folders = glob.glob(os.path.join(base_dir, '28*'))
     if len(device_folders) == 0:
         raise Exception('cannot find temperature sensor device folder')
-    
-    return open(os.path.join(device_folders[0], '/w1_slave'), 'r')
+
+    return open(os.path.join(device_folders[0], 'w1_slave'), 'r')
 
 class TemperatureReader(object):
     def __init__(self, open_device=_open_device):

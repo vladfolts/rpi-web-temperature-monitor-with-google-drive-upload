@@ -17,13 +17,14 @@ def process_command_line():
     parser = argparse.ArgumentParser(description='Logs temperature.')
     parser.add_argument('--random-reader', dest='random_reader', action='store_true',
                         help='do not read actual temerature, use randomizer')
-
+    parser.add_argument('--db-path', dest='db_path', default=storer.db_name,
+                        help='full path to db')
     return parser.parse_args()
 
 if __name__ == '__main__':
     options = process_command_line()
     t_reader = _RandomReader() if options.random_reader else reader.TemperatureReader()
 
-    s = storer.Sqlite3Storer()
+    s = storer.Sqlite3Storer(options.db_path)
     r = reader.TimedReader(reader=t_reader, timeout_seconds=1)
     run(r, s)

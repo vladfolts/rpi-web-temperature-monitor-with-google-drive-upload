@@ -20,6 +20,13 @@ def with_sample_db(with_empty_dir):
     s.put(storer.Record(timestamp=1537131015, value=26))
     return s, db_path
 
+@pytest.fixture
+def with_two_dates_in_sample_db(with_empty_dir, with_sample_db):
+    s = with_sample_db[0]
+    s.put(storer.Record(timestamp=1539561879.77, value=26))
+    s.put(storer.Record(timestamp=1539561880.77, value=25.67))
+    return s, with_sample_db[1]
+
 def remove_if_exists(path):
     if os.path.exists(path):
         os.remove(path)

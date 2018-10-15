@@ -1,5 +1,3 @@
-import backup
-
 import googleapiclient.discovery
 import httplib2
 import oauth2client.file
@@ -27,8 +25,3 @@ def upload(path):
         create_or_update = files.update
 
     create_or_update(**kwargs).execute()
-
-if __name__ == '__main__':
-    backup_file = 'backup.db'
-    backup.backup(output=backup_file)
-    upload(backup_file)

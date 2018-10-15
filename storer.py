@@ -20,6 +20,9 @@ class Sqlite3Storer(object):
         if not existed:
             _create_db_schema(self.__conn)
 
+    def close(self):
+        self.__conn.close()
+
     def put(self, record):
         cursor = self.__conn.cursor()
         cursor.execute('INSERT INTO temperature(timestamp, value) VALUES(%s, %s)' % (record.timestamp, record.value))
@@ -33,3 +36,16 @@ class Sqlite3Storer(object):
         cursor = self.__conn.cursor()
         for row in cursor.execute(sql):
             yield Record(timestamp=row[0], value=row[1])
+
+    def trim(self, date, before_only=False):
+        sql = "DELETE FROM temperature WHERE date(timestamp, 'unixepoch', 'localtime') < '%s'" % date
+        if not before_only:
+            sql += " OR date(timestamp, 'unixepoch', 'localtime') > '%s'" % date
+        cursor = self.__conn.cursor()
+        cursor.execute(sql)
+        self.__conn.commit()
+
+    def list_dates(self):
+        sql = "SELECT date(timestamp, 'unixepoch', 'localtime') FROM temperature GROUP BY date(timestamp, 'unixepoch', 'localtime') ORDER BY timestamp DESC"
+        cursor = self.__conn.cursor()
+        return [row[0] for row in cursor.execute(sql)]

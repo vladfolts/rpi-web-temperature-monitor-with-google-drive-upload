@@ -1,14 +1,17 @@
 import reader
 
 class DeviceStub(object):
-    def __init__(self, lines):
-        self.__lines = lines
-        self.__current_line = 0
+    def __init__(self, text):
+        self.__text = text
 
-    def readline(self):
-        result = self.__lines[self.__current_line]
-        self.__current_line += 1 
-        return result
+    def read(self):
+        return self.__text
+
+    def __enter__(self, *args):
+        return self
+
+    def __exit__(self, *args):
+        pass
 
 class ReaderStub(object):
     def __init__(self, values):
@@ -22,25 +25,25 @@ class ReaderStub(object):
 
 class TestTemperatureReader(object):
     def test_read(self):
-        device = DeviceStub([
-            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n',
+        data = iter([
+            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n'\
             '72 01 4b 46 7f ff 0e 10 57 t=23125\n',
-            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n',
-            '72 01 4b 46 7f ff 0e 10 57 t=33000\n',
+            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n'\
+            '72 01 4b 46 7f ff 0e 10 57 t=33000\n'
             ])
-        r = reader.TemperatureReader(open_device=lambda: device)
+        r = reader.TemperatureReader(open_device=lambda: DeviceStub(next(data)))
         assert r.read() == 23.125
         assert r.read() == 33
 
     def test_may_read_none(self):
-        device = DeviceStub([
+        data = iter([
             '',
             '72 01 4b 46 7f ff 0e 10 57 t=23125\n',
-            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n',
+            '72 01 4b 46 7f ff 0e 10 57 : crc=57 YES\n'\
             '72 01 4b 46 7f ff 0e 10 57 t=33000\n',
-            'abc',
+            'abc'
             ])
-        r = reader.TemperatureReader(open_device=lambda: device)
+        r = reader.TemperatureReader(open_device=lambda: DeviceStub(next(data)))
         assert r.read() is None
         assert r.read() is None
         assert r.read() == 33

@@ -12,15 +12,23 @@ def _open_device():
 
 class TemperatureReader(object):
     def __init__(self, open_device=_open_device):
-        self.__device = open_device() 
+        self.__open_device = open_device 
 
     def read(self):
-        first_line = self.__read_line()
+        with self.__open_device() as device:
+            lines = device.read().splitlines()
+
+        lines_count = len(lines)
+        if lines_count < 2:
+            print('expected at least 2 lines, got %d' % lines_count)
+            return None
+
+        first_line = lines[0]
         if not first_line.endswith('YES'):         
             print('unexpected first line: %s' % first_line)
             return None
 
-        second_line = self.__read_line()
+        second_line = lines[1]
         t_prefix = 't='
         t_index = second_line.rfind(t_prefix)
         if t_index == -1:
@@ -28,9 +36,6 @@ class TemperatureReader(object):
             return None
 
         return int(second_line[t_index + len(t_prefix): ]) / 1000.
-
-    def __read_line(self):
-        return self.__device.readline().strip()
 
 class TimedReader(object):
     def __init__(self, reader, timeout_seconds):

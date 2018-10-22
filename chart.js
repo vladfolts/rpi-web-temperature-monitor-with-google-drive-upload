@@ -29,7 +29,7 @@ function chartData(response){
     if (missed_timestamps.length)
         label += ' (some data is missing)';
     
-    return {label: label, labels: labels, data: values};
+    return {label: label, labels: labels, values: values};
 }
 
 if (typeof exports != 'undefined')

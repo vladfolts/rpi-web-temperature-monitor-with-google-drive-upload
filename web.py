@@ -20,10 +20,15 @@ def temperature():
         result.append({'timestamp': r.timestamp, 'value': r.value})
     return jsonify(result)
 
-@app.route('/temperature/chart', methods=['GET'])
-def chart():  # pragma: no cover
+@app.route('/temperature/chart.html', methods=['GET'])
+def chart_html():
     content = open('chart.html')
-    return Response(content, mimetype="text/html")
+    return Response(content, mimetype='text/html')
+
+@app.route('/temperature/chart.js', methods=['GET'])
+def chart_js():
+    content = open('chart.js')
+    return Response(content, mimetype='application/javascript')
 
 def process_command_line():
     parser = argparse.ArgumentParser(description='Web Service.')

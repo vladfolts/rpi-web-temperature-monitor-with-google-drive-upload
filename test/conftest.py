@@ -13,12 +13,17 @@ def with_empty_dir():
     return result
 
 @pytest.fixture
-def with_sample_db(with_empty_dir):
+def with_empty_db(with_empty_dir):
     db_path = os.path.join(with_empty_dir, 'sample.db')
     s = storer.Sqlite3Storer(db_path)
+    return s, db_path
+
+@pytest.fixture
+def with_sample_db(with_empty_db):
+    s = with_empty_db[0]
     s.put(storer.Record(timestamp=1537131014.49, value=25.67))
     s.put(storer.Record(timestamp=1537131015, value=26))
-    return s, db_path
+    return with_empty_db
 
 @pytest.fixture
 def with_two_dates_in_sample_db(with_empty_dir, with_sample_db):

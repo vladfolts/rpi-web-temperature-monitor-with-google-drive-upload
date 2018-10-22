@@ -1,10 +1,15 @@
-#from fixture import with_sample_db
+import storer
 
 import os
 
-def test_sqlite3_storer(with_sample_db):
-    db_path = with_sample_db[1]
+def test_sqlite3_storer(with_empty_db):
+    db_path = with_empty_db[1]
     assert os.path.exists(db_path)
+
+def test_put_none(with_empty_db):
+    s = with_empty_db[0]
+    s.put(storer.Record(timestamp=1537131015, value=None))
+    assert [(r.timestamp, r.value) for r in s.list_gen()] == [(1537131015, None)]
 
 def test_list_gen(with_sample_db):
     storer = with_sample_db[0]

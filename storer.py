@@ -25,7 +25,10 @@ class Sqlite3Storer(object):
 
     def put(self, record):
         cursor = self.__conn.cursor()
-        cursor.execute('INSERT INTO temperature(timestamp, value) VALUES(%s, %s)' % (record.timestamp, record.value))
+        v = record.value
+        if v is None:
+            v = 'NULL'
+        cursor.execute('INSERT INTO temperature(timestamp, value) VALUES(%s, %s)' % (record.timestamp, v))
         self.__conn.commit()
 
     def list_gen(self, limit=None):

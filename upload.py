@@ -1,14 +1,13 @@
 import googleapiclient.discovery
-import httplib2
-import oauth2client.file
+import pickle
 
 import os
 import sys
 
 def upload(path):
-    store = oauth2client.file.Storage(os.path.expanduser('~/google_drive_token.json'))
-    creds = store.get()
-    service = googleapiclient.discovery.build('drive', 'v3', http=creds.authorize(httplib2.Http()))
+    with open(os.path.expanduser('~/google_drive_token.pickle'), 'rb') as token:
+        creds = pickle.load(token)
+    service = googleapiclient.discovery.build('drive', 'v3', credentials=creds)
     files = service.files()
     
     file_name = os.path.basename(path)
@@ -25,3 +24,7 @@ def upload(path):
         create_or_update = files.update
 
     create_or_update(**kwargs).execute()
+
+
+if __name__ == '__main__':
+    upload(sys.argv[1])

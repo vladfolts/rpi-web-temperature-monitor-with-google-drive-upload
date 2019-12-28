@@ -23,8 +23,8 @@ function testSeveralEntries(){
     label = normLabel(result.label);
     assert(label == 'Temperature Sun Sep 16 2018 15:50:15 GMT-0500 (CDT)'); 
     assert(result.labels.length == 2);
-    assert(result.labels[0] == '50:14'); 
-    assert(result.labels[1] == '50:15'); 
+    assert(result.labels[0] == '15:50:14'); 
+    assert(result.labels[1] == '15:50:15'); 
     assert(result.values.length == 2); 
     assert(result.values[0] == 25.67); 
     assert(result.values[1] == 26); 
@@ -35,7 +35,7 @@ function testSomeDataMissing(){
     label = normLabel(result.label);
     assert(label == 'Temperature Sun Sep 16 2018 15:50:15 GMT-0500 (CDT) (some data is missing)'); 
     assert(result.labels.length == 1); 
-    assert(result.labels[0] == '50:14'); 
+    assert(result.labels[0] == '15:50:14'); 
     assert(result.values.length == 1); 
     assert(result.values[0] == 25.67); 
 }

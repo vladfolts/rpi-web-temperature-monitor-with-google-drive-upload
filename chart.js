@@ -4,7 +4,7 @@ function dtFromSecs(secs){
 
 function secsToLabel(secs){
     t = dtFromSecs(secs);
-    return t.getMinutes() + ':' + t.getSeconds();
+    return t.getHours() + ':' + t.getMinutes() + ':' + t.getSeconds();
 }
 
 function chartData(response){

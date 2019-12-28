@@ -17,7 +17,8 @@ function getData(){
             showChart(response)
         }
     };
-    xhttp.open("GET", "/temperature/?limit=600", true);
+    q = window.location.search || "?limit=600"
+    xhttp.open("GET", "/temperature/" + q, true);
     xhttp.send();
 }
 

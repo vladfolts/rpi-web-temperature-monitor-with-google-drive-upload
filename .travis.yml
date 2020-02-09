@@ -1,0 +1,14 @@
+matrix:
+  include:
+    - language: python
+      python:
+        - "2.7"
+      install:
+        - pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+      script:
+        - pytest -s test
+    - language: node_js
+      env:
+        - NODE_PATH=$TRAVIS_BUILD_DIR
+      script:
+        - node test/test_chart.js

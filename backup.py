@@ -27,7 +27,7 @@ def with_retry(backup, attempts=5, timeout=0.2):
                       % (retry, timeout, x))
                 time.sleep(timeout)
             else:
-                print('giving up after %d attempts')
+                print('giving up after %d attempts' % attempts)
                 raise
         
 def backup_and_trim(db_path, upload=upload.upload):

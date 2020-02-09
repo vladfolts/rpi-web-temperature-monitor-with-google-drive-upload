@@ -3,7 +3,7 @@ import storer
 
 import os
 import pytest
-from mock import Mock
+from mock import call, Mock
 
 def test_backup(with_empty_dir, with_sample_db):
     output = os.path.join(with_empty_dir, 'backup.db')
@@ -31,12 +31,12 @@ def test_backup_with_retry_tried_once_if_ok():
 
 def test_backup_with_retry():
     calls = {'count': 0}
-    def backup_mock():
+    def fail_first_time():
+        calls['count'] += 1
         count = calls['count']
-        if count == 0:
+        if count == 1:
             raise Exception('test')
-        count += 1    
-        calls['count'] = count
-
+        
+    backup_mock = Mock(side_effect=fail_first_time)
     backup.with_retry(backup_mock, attempts=2)
-    backup_mock.assert_called_once_with()
+    backup_mock.assert_has_calls([call(), call()])

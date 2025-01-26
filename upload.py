@@ -1,12 +1,13 @@
-import googleapiclient.discovery
-import pickle
-
 import os
 import sys
 
+import googleapiclient.discovery
+from google.oauth2.credentials import Credentials
+
+
 def upload(path):
-    with open(os.path.expanduser('~/google_drive_token.pickle'), 'rb') as token:
-        creds = pickle.load(token)
+    token_file = os.path.expanduser("~/google_drive_token.json")
+    creds = Credentials.from_authorized_user_file(token_file)
     service = googleapiclient.discovery.build('drive', 'v3', credentials=creds)
     files = service.files()
     

@@ -3,7 +3,7 @@ import upload
 
 import argparse
 import os
-from pipes import quote
+from shlex import quote
 import subprocess
 import sys
 import time

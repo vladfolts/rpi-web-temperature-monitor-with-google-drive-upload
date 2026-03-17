@@ -1,3 +1,4 @@
+from time import sleep
 import storer
 import reader
 
@@ -5,9 +6,18 @@ import argparse
 import random
 
 def run(read, store):
+    next_attempt_interval = 1  # seconds
     while True:
-        data = read.read()
-        store.put(storer.Record(timestamp=data['time'], value=data['value']))
+        try:
+            data = read.read()
+            store.put(storer.Record(timestamp=data['time'], value=data['value']))
+            next_attempt_interval = 1
+        except Exception as e:
+            print('Error: %s' % e)            
+            if next_attempt_interval < 600:
+                next_attempt_interval *= 2
+            print('Next attempt in %d seconds' % next_attempt_interval)
+            sleep(next_attempt_interval)
 
 class _RandomReader(object):
     def read(self):
